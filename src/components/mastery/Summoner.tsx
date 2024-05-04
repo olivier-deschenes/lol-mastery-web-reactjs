@@ -80,7 +80,7 @@ export function Summoner({ summoner }: Props) {
       <div>
         <div
           className="w-4 h-8 rounded-r-md"
-          style={{ backgroundColor: summoner.hexColor }}
+          /* style={{ backgroundColor: summoner.hexColor }} */
         />
       </div>
     </div>
