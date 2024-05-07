@@ -8,9 +8,11 @@ type Props = {
 };
 
 export function Mastery({ mastery }: Props) {
-  const { c } = Route.useSearch();
+  const { c, hs } = Route.useSearch();
+  const navigate = Route.useNavigate();
 
-  const { getSummonerFromPuuid } = useMasteryContext();
+  const { getSummonerFromPuuid, getSummonerIndexFromPuuid } =
+    useMasteryContext();
 
   const isVisible = mastery.champion.name
     .toUpperCase()
@@ -45,20 +47,37 @@ export function Mastery({ mastery }: Props) {
             <div>{formatter.format(mastery.totalChampionPoints)}</div>
           </div>
           <div className="bg-gray-100 rounded-md h-6 flex">
-            {mastery.data.map((m) => (
-              <div
-                key={`mastery-${m.puuid}`}
-                style={{
-                  width: `${
-                    (m.championPoints / mastery.totalChampionPoints) * 100
-                  }%`,
-                  /* backgroundColor: `${getSummonerFromPuuid(m.puuid).hexColor}`, */
-                }}
-                className="first:rounded-l-md last:rounded-r-md relative group"
-              >
-                <Tooltip mastery={m} summoner={getSummonerFromPuuid(m.puuid)} />
-              </div>
-            ))}
+            {mastery.data.map((m) => {
+              const summoner = getSummonerFromPuuid(m.puuid);
+              const index = getSummonerIndexFromPuuid(m.puuid);
+
+              return (
+                <div
+                  key={`mastery-${m.puuid}`}
+                  style={{
+                    width: `${
+                      (m.championPoints / mastery.totalChampionPoints) * 100
+                    }%`,
+                    backgroundColor: `${summoner.hexColor}`,
+                    opacity: hs === null || hs === index ? 1 : 0.3,
+                  }}
+                  className="first:rounded-l-md last:rounded-r-md relative group"
+                  onClick={() => {
+                    navigate({
+                      search: (prev) => ({
+                        ...prev,
+                        hs: hs === index ? null : index,
+                      }),
+                    });
+                  }}
+                >
+                  <Tooltip
+                    mastery={m}
+                    summoner={getSummonerFromPuuid(m.puuid)}
+                  />
+                </div>
+              );
+            })}
           </div>
         </div>
       </div>

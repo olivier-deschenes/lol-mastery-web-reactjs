@@ -35,11 +35,12 @@ export const MasteryContext = createContext(null);
 const sortSchema = picklist(["asc", "desc"]);
 
 const MasterySearchParamSchema = object({
-  s: optional(array(string()), []),
-  mSort: optional(nullable(sortSchema), "desc"),
-  cSort: optional(nullable(sortSchema), null),
-  fs: optional(array(number()), []),
-  c: optional(string(), ""),
+  s: optional(array(string()), []), // Summoners
+  mSort: optional(nullable(sortSchema), "desc"), // Mastery Points Sort
+  cSort: optional(nullable(sortSchema), null), // Champion Name Sort
+  fs: optional(array(number()), []), // Filtered Summoners
+  c: optional(string(), ""), // Champion Name filter
+  hs: optional(nullable(number()), null), // Summoner hightlight
 });
 
 type MasterySearchParamType = Output<typeof MasterySearchParamSchema>;
@@ -60,7 +61,7 @@ function MasteryList() {
 
   const [summonerNamesInput, setSummonerNamesInput] = useState("");
 
-  const { mSort, c, cSort } = Route.useSearch();
+  const { mSort, c, cSort, fs } = Route.useSearch();
   const navigate = Route.useNavigate();
   const data = Route.useLoaderData();
 
@@ -72,6 +73,11 @@ function MasteryList() {
 
     mastery.forEach((m) => {
       const key = m.champion.id;
+      const summonerIndex = summoners.findIndex((s) => s.puuid === m.puuid)!;
+
+      if (!fs.includes(summonerIndex)) {
+        return;
+      }
 
       if (!masteryMap.has(key)) {
         masteryMap.set(key, {
@@ -108,7 +114,7 @@ function MasteryList() {
     };
 
     return multiMastery;
-  }, [data]);
+  }, [data, fs]);
 
   const mergedData = useMemo<MultiSummonerMasteryType>(() => {
     return {
