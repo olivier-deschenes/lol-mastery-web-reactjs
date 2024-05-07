@@ -11,6 +11,7 @@ export const Route = createFileRoute("/")({
         fs: [],
         s: [],
         cSort: null,
+        hs: null,
       },
     });
   },
