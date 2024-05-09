@@ -7,7 +7,7 @@ import {
   ArrowUpDownIcon,
   ArrowUpZAIcon,
   Eraser,
-  RefreshCcw,
+  MedalIcon,
 } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { MultiMasteryInfoType, MultiSummonerMasteryType } from "@/types/api";
@@ -23,12 +23,14 @@ import {
   picklist,
   string,
 } from "valibot";
-import { Summoner } from "@/components/mastery/Summoner";
-import { Mastery } from "@/components/mastery/Mastery";
 import { createFileRoute } from "@tanstack/react-router";
 import { getMasteriesOptions } from "../../queries/getMasteriesOptions";
 import { Button } from "@/components/ui/button";
 import { HistoryDialog } from "@/components/mastery/HistoryDialog";
+import { SummonerQuickTips } from "../../components/mastery/SummonerQuickTips";
+import { useQuery } from "@tanstack/react-query";
+import { SummonersList } from "../../components/mastery/SummonersList";
+import { MasteryList } from "../../components/mastery/MasteryList";
 
 export const MasteryContext = createContext(null);
 
@@ -46,26 +48,26 @@ const MasterySearchParamSchema = object({
 type MasterySearchParamType = Output<typeof MasterySearchParamSchema>;
 
 export const Route = createFileRoute("/mastery/")({
-  component: MasteryList,
+  component: Index,
   validateSearch: (search) => parse(MasterySearchParamSchema, search),
   loaderDeps: ({ search }) => ({
     s: search.s,
   }),
-  loader: async ({ deps, context: { queryClient } }) =>
-    queryClient.ensureQueryData(getMasteriesOptions({ s: deps.s })),
-  pendingComponent: () => <div>Loading...</div>,
 });
 
-function MasteryList() {
-  //     "odeschenes#001\nopaxx#1234\nodeschenes#003\nOlivierDeschênes#004\nodeschenes4#1234\nOlivierDeschênes#006\nodeschenes#005"
-
+function Index() {
   const [summonerNamesInput, setSummonerNamesInput] = useState("");
+  const { mSort, c, cSort, fs, s } = Route.useSearch();
 
-  const { mSort, c, cSort, fs } = Route.useSearch();
+  const q_masteries = useQuery(getMasteriesOptions({ s }));
+
+  const data = q_masteries.data;
+
   const navigate = Route.useNavigate();
-  const data = Route.useLoaderData();
 
   const liveMergedData = useMemo<MultiSummonerMasteryType>(() => {
+    if (!data) return { summoners: [], mastery: [] };
+
     const summoners = data.map((m) => m.summoner);
     const mastery = data.map((m) => m.mastery).flat();
 
@@ -165,7 +167,17 @@ function MasteryList() {
 
   return (
     <MasteryProvider mastery={mergedData}>
-      <div className="container flex flex-col gap-10 mt-10 mx-auto">
+      <div className="container flex flex-col mx-auto">
+        <header>
+          <h1
+            className={
+              "text-3xl font-bold py-5 text-primary flex gap-1.5 items-center"
+            }
+          >
+            <MedalIcon />
+            Mastery
+          </h1>
+        </header>
         <div className="flex flex-col w-full lg:w-1/2 justify-center items-center mx-auto gap-3">
           <div className="w-full">
             <Textarea
@@ -174,7 +186,7 @@ function MasteryList() {
               value={summonerNamesInput}
               onChange={(e) => setSummonerNamesInput(e.target.value)}
               onKeyDown={(e) => {
-                if (e.key === "Enter") {
+                if (e.key === "Enter" && !e.shiftKey) {
                   e.stopPropagation();
                   e.preventDefault();
                   handleClick();
@@ -182,13 +194,9 @@ function MasteryList() {
               }}
             />
           </div>
+          <SummonerQuickTips />
           <div className="flex justify-between w-full">
-            <div>
-              <Button variant={"ghost"}>
-                <RefreshCcw className="w-4 mr-1" /> Refresh Colors
-              </Button>
-            </div>
-            <div className={"flex gap-1"}>
+            <div className={"flex gap-1 ml-auto"}>
               <HistoryDialog />
               <Button onClick={handleClick}>Search</Button>
             </div>
@@ -199,14 +207,7 @@ function MasteryList() {
             <div className="items-center">
               <h2 className="font-mono font-bold">Summoners</h2>
             </div>
-            <div className="flex items-start md:items-center gap-1.5 md:gap-5 flex-col md:flex-row flex-wrap select-none">
-              {mergedData.summoners.map((summoner) => (
-                <Summoner
-                  key={`summoner-${summoner.puuid}`}
-                  summoner={summoner}
-                />
-              ))}
-            </div>
+            <SummonersList />
           </div>
           <div className="flex flex-col gap-1.5">
             <div className="items-center flex justify-between">
@@ -261,14 +262,7 @@ function MasteryList() {
               />
             </div>
           </div>
-          <div className="grid gap-5 grid-cols-2 md:grid-cols-3 lg:grid-cols-4 grid-rows-12">
-            {mergedData.mastery.map((mastery) => (
-              <Mastery
-                mastery={mastery}
-                key={`mastery-${mastery.champion.id}`}
-              />
-            ))}
-          </div>
+          <MasteryList />
         </div>
       </div>
     </MasteryProvider>

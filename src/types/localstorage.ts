@@ -8,5 +8,6 @@ export const SearchCacheSummonerSchema = object({
 });
 export type SearchCacheSummonerType = Output<typeof SearchCacheSummonerSchema>;
 
+
 export const SearchCacheSchema = array(array(SearchCacheSummonerSchema));
 export type SeachCacheType = Output<typeof SearchCacheSchema>;

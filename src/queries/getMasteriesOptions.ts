@@ -24,7 +24,7 @@ function saveToLocalStorage(summoners: SummonerType[]) {
     const cache = localStorage.getItem(SEARCH_CACHE_KEY);
     const searchCache: SeachCacheType = cache ? JSON.parse(cache) : [];
 
-    searchCache.push(
+    searchCache.unshift(
       summoners.map((s) => ({
         puuid: s.puuid,
         gameName: s.gameName,
@@ -32,6 +32,8 @@ function saveToLocalStorage(summoners: SummonerType[]) {
         profileIconUrl: s.profileIconUrl,
       }))
     );
+
+    searchCache.splice(3);
 
     localStorage.setItem(SEARCH_CACHE_KEY, JSON.stringify(searchCache));
   } catch (error) {
@@ -54,6 +56,8 @@ export const getMasteriesOptions = ({ s }: { s: Array<string> }) =>
   queryOptions({
     queryKey: ["masteries", s],
     queryFn: async () => {
+      await new Promise((resolve) => setTimeout(resolve, 1000));
+      
       if (!s.length) {
         return [];
       }

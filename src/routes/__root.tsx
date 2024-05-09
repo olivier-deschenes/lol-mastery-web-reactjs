@@ -54,7 +54,7 @@ interface Context {
 export const Route = createRootRouteWithContext<Context>()({
   component: () => (
     <div className={"flex"}>
-      <nav className={"flex flex-col bg-gray-50 max-h-screen h-screen"}>
+      <nav className={"flex flex-col bg-gray-50 max-h-screen h-screen hidden"}>
         <div className={"p-1.5 border-r border-b"}>
           <div className={"p-5 rounded-md bg-primary text-white flex flex-1"}>
             <h1 className={"text-2xl font-bold"}>ChampionMastery.lol</h1>
