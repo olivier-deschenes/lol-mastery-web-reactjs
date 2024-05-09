@@ -55,9 +55,10 @@ const fetchMastery = async (name: string) => {
 export const getMasteriesOptions = ({ s }: { s: Array<string> }) =>
   queryOptions({
     queryKey: ["masteries", s],
+    retry: false,
     queryFn: async () => {
       await new Promise((resolve) => setTimeout(resolve, 1000));
-      
+
       if (!s.length) {
         return [];
       }

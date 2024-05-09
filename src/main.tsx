@@ -32,7 +32,7 @@ if (!rootElement.innerHTML) {
   root.render(
     <QueryClientProvider client={queryClient}>
       <RouterProvider router={router} context={{ queryClient }} />
-      <Toaster />
+      <Toaster richColors />
     </QueryClientProvider>
   );
 }

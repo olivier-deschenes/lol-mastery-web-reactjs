@@ -1,4 +1,4 @@
-import { useState, createContext, useMemo } from "react";
+import { useState, createContext, useMemo, useEffect } from "react";
 import { Textarea } from "@/components/ui/textarea";
 import {
   ArrowDown01,
@@ -31,6 +31,7 @@ import { SummonerQuickTips } from "../../components/mastery/SummonerQuickTips";
 import { useQuery } from "@tanstack/react-query";
 import { SummonersList } from "../../components/mastery/SummonersList";
 import { MasteryList } from "../../components/mastery/MasteryList";
+import { toast } from "sonner";
 
 export const MasteryContext = createContext(null);
 
@@ -64,6 +65,14 @@ function Index() {
   const data = q_masteries.data;
 
   const navigate = Route.useNavigate();
+
+  useEffect(() => {
+    if (q_masteries.isError) {
+      toast.error("An error occurred while fetching the data.");
+
+      navigate({ search: {} });
+    }
+  }, [navigate, q_masteries.error, q_masteries.isError]);
 
   const liveMergedData = useMemo<MultiSummonerMasteryType>(() => {
     if (!data) return { summoners: [], mastery: [] };
