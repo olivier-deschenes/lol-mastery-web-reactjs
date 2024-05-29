@@ -184,7 +184,7 @@ function Index() {
             }
           >
             <MedalIcon />
-            Mastery
+            ChampionMastery.lol
           </h1>
         </header>
         <div className="flex flex-col w-full lg:w-1/2 justify-center items-center mx-auto gap-3">
