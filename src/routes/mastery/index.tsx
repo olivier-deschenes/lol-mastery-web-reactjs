@@ -10,11 +10,15 @@ import {
   MedalIcon,
 } from "lucide-react";
 import { Input } from "@/components/ui/input";
-import { MultiMasteryInfoType, MultiSummonerMasteryType } from "@/types/api";
+import {
+  MasteryResponseType,
+  MultiMasteryInfoType,
+  MultiSummonerMasteryType,
+} from "@/types/api";
 import { MasteryProvider } from "@/contexts/MasteryContext";
 import {
-  Output,
   array,
+  InferOutput,
   nullable,
   number,
   object,
@@ -24,11 +28,9 @@ import {
   string,
 } from "valibot";
 import { createFileRoute } from "@tanstack/react-router";
-import { getMasteriesOptions } from "../../queries/getMasteriesOptions";
+import { useMasteries } from "../../queries/getMasteries";
 import { Button } from "@/components/ui/button";
-import { HistoryDialog } from "@/components/mastery/HistoryDialog";
 import { SummonerQuickTips } from "../../components/mastery/SummonerQuickTips";
-import { useQuery } from "@tanstack/react-query";
 import { SummonersList } from "../../components/mastery/SummonersList";
 import { MasteryList } from "../../components/mastery/MasteryList";
 import { toast } from "sonner";
@@ -46,7 +48,7 @@ const MasterySearchParamSchema = object({
   hs: optional(nullable(number()), null), // Summoner hightlight
 });
 
-type MasterySearchParamType = Output<typeof MasterySearchParamSchema>;
+type MasterySearchParamType = InferOutput<typeof MasterySearchParamSchema>;
 
 export const Route = createFileRoute("/mastery/")({
   component: Index,
@@ -60,22 +62,33 @@ function Index() {
   const [summonerNamesInput, setSummonerNamesInput] = useState("");
   const { mSort, c, cSort, fs, s } = Route.useSearch();
 
-  const q_masteries = useQuery(getMasteriesOptions({ s }));
+  const q_masteries = useMasteries(s);
 
-  const data = q_masteries.data;
+  const firstError = useMemo(
+    () => q_masteries.find((q) => q.isError),
+    [q_masteries]
+  );
 
   const navigate = Route.useNavigate();
 
   useEffect(() => {
-    if (q_masteries.isError) {
+    if (firstError) {
       toast.error("An error occurred while fetching the data.");
 
       navigate({ search: {} });
     }
-  }, [navigate, q_masteries.error, q_masteries.isError]);
+  }, [firstError, navigate]);
 
   const liveMergedData = useMemo<MultiSummonerMasteryType>(() => {
-    if (!data) return { summoners: [], mastery: [] };
+    const allFetched = q_masteries.every((q) => !q.isLoading && !q.isPending);
+
+    if (!allFetched) return { summoners: [], mastery: [] };
+
+    const data = q_masteries.reduce<MasteryResponseType[]>((acc, q) => {
+      acc.push(q.data!);
+
+      return acc;
+    }, []);
 
     const summoners = data.map((m) => m.summoner);
     const mastery = data.map((m) => m.mastery).flat();
@@ -125,7 +138,7 @@ function Index() {
     };
 
     return multiMastery;
-  }, [data, fs]);
+  }, [fs, q_masteries]);
 
   const mergedData = useMemo<MultiSummonerMasteryType>(() => {
     return {
@@ -165,8 +178,9 @@ function Index() {
   const handleSortChange = (
     key: keyof Pick<MasterySearchParamType, "cSort" | "mSort">
   ) => {
-    const newSort =
-      (key === "mSort" ? mSort : cSort) === "asc" ? "desc" : "asc";
+    const sort = key === "mSort" ? mSort : cSort;
+
+    const newSort = { asc: "desc", desc: null, null: "asc" }[`${sort}`];
     const otherKey = key === "mSort" ? "cSort" : "mSort";
 
     navigate({
@@ -206,7 +220,6 @@ function Index() {
           <SummonerQuickTips />
           <div className="flex justify-between w-full">
             <div className={"flex gap-1 ml-auto"}>
-              <HistoryDialog />
               <Button onClick={handleClick}>Search</Button>
             </div>
           </div>
@@ -231,9 +244,9 @@ function Index() {
                   {cSort === null ? (
                     <ArrowUpDownIcon className="w-4 mr-1" />
                   ) : cSort === "asc" ? (
-                    <ArrowDownAZIcon className="w-4 mr-1" />
+                    <ArrowDownAZIcon className="w-4 mr-1 text-primary" />
                   ) : (
-                    <ArrowUpZAIcon className="w-4 mr-1" />
+                    <ArrowUpZAIcon className="w-4 mr-1 text-primary" />
                   )}{" "}
                   Champion Name
                 </Button>
@@ -244,9 +257,9 @@ function Index() {
                   {mSort === null ? (
                     <ArrowUpDownIcon className="w-4 mr-1" />
                   ) : mSort === "asc" ? (
-                    <ArrowDown01 className="w-4 mr-1" />
+                    <ArrowDown01 className="w-4 mr-1 text-primary" />
                   ) : (
-                    <ArrowUp10Icon className="w-4 mr-1" />
+                    <ArrowUp10Icon className="w-4 mr-1 text-primary" />
                   )}{" "}
                   Mastery Points
                 </Button>

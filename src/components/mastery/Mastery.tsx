@@ -58,7 +58,7 @@ export function Mastery({ mastery }: Props) {
                     width: `${
                       (m.championPoints / mastery.totalChampionPoints) * 100
                     }%`,
-                    backgroundColor: `${summoner.hexColor}`,
+                    backgroundColor: `${summoner.metadata.hexColor}`,
                     opacity: hs === null || hs === index ? 1 : 0.3,
                   }}
                   className="first:rounded-l-md last:rounded-r-md relative group"

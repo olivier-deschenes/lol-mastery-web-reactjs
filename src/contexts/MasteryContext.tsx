@@ -1,5 +1,6 @@
 import { PropsWithChildren, createContext, useContext, useMemo } from "react";
-import { MultiSummonerMasteryType, SummonerType } from "../types/api";
+import { SummonerType } from "../api/mastery/types";
+import { MultiSummonerMasteryType } from "../types/api";
 
 type MasteryContextType = {
   mastery: MultiSummonerMasteryType;

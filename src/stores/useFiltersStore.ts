@@ -1,5 +1,5 @@
 import { create } from "zustand";
-import { SummonerType } from "../types/api";
+import { SummonerType } from "../api/mastery/types";
 
 interface State {
   championName: string;

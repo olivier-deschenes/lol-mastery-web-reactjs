@@ -1,10 +1,38 @@
-import { SummonerType } from "../../types/api";
 import { cn } from "../../lib/utils";
 import { useMasteryContext } from "../../contexts/MasteryContext";
 import { Route } from "../../routes/mastery";
-type Props = {
-  summoner: SummonerType;
+import { SummonerResponseType } from "../../types/api";
+import { useRefreshMastery } from "../../queries/getMasteries";
+import { RefreshCcwIcon } from "lucide-react";
+import { MouseEvent } from "react";
+
+const timeAgo = (input: Date | number | string) => {
+  const date = new Date(input).getTime();
+  const now = Date.now();
+  const diff = date - now;
+  const rtf = new Intl.RelativeTimeFormat("en", { numeric: "auto" });
+  const units = [
+    { ms: 1000 * 60 * 60 * 24 * 365, name: "year" },
+    { ms: 1000 * 60 * 60 * 24 * 30, name: "month" },
+    { ms: 1000 * 60 * 60 * 24 * 7, name: "week" },
+    { ms: 1000 * 60 * 60 * 24, name: "day" },
+    { ms: 1000 * 60 * 60, name: "hour" },
+    { ms: 1000 * 60, name: "minute" },
+    { ms: 1000, name: "second" },
+  ];
+  for (const u of units) {
+    if (Math.abs(diff) >= u.ms || u.name === "second")
+      return rtf.format(
+        Math.round(diff / u.ms),
+        u.name as Intl.RelativeTimeFormatUnit
+      );
+  }
 };
+
+type Props = {
+  summoner: SummonerResponseType;
+};
+
 export function Summoner({ summoner }: Props) {
   const { fs } = Route.useSearch();
   const navigate = Route.useNavigate();
@@ -62,26 +90,53 @@ export function Summoner({ summoner }: Props) {
     });
   };
 
+  const m_mastery = useRefreshMastery();
+
+  const handleRefresh = (e: MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+    e.stopPropagation();
+    m_mastery.mutate({
+      s: `${summoner.gameName}#${summoner.tagLine}`,
+      hexColor: summoner.metadata.hexColor,
+    });
+  };
+
   return (
     <div
-      onClick={handleToggleSummoner}
       className={cn(
-        "flex bg-gray-100 rounded-r-md justify-center items-center w-auto hover:bg-gray-200 cursor-pointer transition-all duration-200 ease-in-out",
+        "flex bg-gray-100 border-r-[1rem] rounded-r-md justify-center items-center w-auto transition-all duration-200 ease-in-out",
         {
           "opacity-50": !fs.includes(getSummonerIndexFromPuuid(summoner.puuid)),
         }
       )}
+      style={{ borderColor: summoner.metadata.hexColor }}
     >
-      <img src={summoner.profileIconUrl} className="w-8 rounded-l-md" />
-      <div className="px-3">
-        <span>{summoner.gameName}</span>
-        <span className="text-slate-600">#{summoner.tagLine}</span>
-      </div>
-      <div>
-        <div
-          className="w-4 h-8 rounded-r-md"
-          style={{ backgroundColor: summoner.hexColor }}
-        />
+      <img
+        src={summoner.profileIconUrl}
+        className="w-12 rounded-l-md cursor-pointer hover:opacity-80"
+        onClick={handleToggleSummoner}
+      />
+      <div className={"px-3 "}>
+        <div className="font-semibold">
+          <span>{summoner.gameName}</span>
+          <span className="text-slate-600">#{summoner.tagLine}</span>
+        </div>
+        <button
+          className={
+            "bg-slate-300 px-1 flex justify-center items-center rounded hover:bg-slate-200 transition-all"
+          }
+          onClick={handleRefresh}
+        >
+          <span className={"font-mono px-1.5 text-xs"}>
+            {m_mastery.isPending
+              ? "refreshing"
+              : timeAgo(summoner.metadata.refreshed_at)}
+          </span>
+          <RefreshCcwIcon
+            size={10}
+            className={cn(m_mastery.isPending && "animate-spin")}
+          />
+        </button>
       </div>
     </div>
   );

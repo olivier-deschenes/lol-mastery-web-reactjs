@@ -1,47 +1,22 @@
-export type SummonerChampionMasteryInfoType = {
-  puuid: string;
-  championLevel: number;
-  championPoints: number;
-  lastPlayTime: string;
-};
+import * as v from "valibot";
+import {
+  ChampionSchema,
+  MasteryResponseSchema,
+  MasteryType,
+  SummonerType,
+} from "../api/mastery/types";
 
-export type BasicChampionMasteryType = {
-  champion: {
-    id: string;
-    key: string;
-    name: string;
-    title: string;
-    image: string;
-  };
-};
-
-export type SummonerType = {
-  id: string;
-  accountId: string;
-  puuid: string;
-  profileIconId: number;
-  profileIconUrl: string;
-  revisionDate: number;
-  summonerLevel: number;
-  gameName: string;
-  tagLine: string;
-  hexColor: string;
-};
-
-export type MasteryResponseType = {
-  mastery: Array<ChampionMasteryType>;
-  summoner: SummonerType;
-};
-
-export type ChampionMasteryType = SummonerChampionMasteryInfoType &
-  BasicChampionMasteryType;
+export type MasteryResponseType = v.InferOutput<typeof MasteryResponseSchema>;
+export type SummonerResponseType = MasteryResponseType["summoner"];
 
 export type MultiMasteryInfoType = {
-  data: Array<SummonerChampionMasteryInfoType>;
+  data: Array<Omit<MasteryType, "champion">>;
   totalChampionPoints: number;
-} & BasicChampionMasteryType;
+  champion: v.InferOutput<typeof ChampionSchema>;
+};
 
 export type MultiSummonerMasteryType = {
   summoners: Array<SummonerType>;
   mastery: Array<MultiMasteryInfoType>;
+  // champion: v.InferOutput<typeof ChampionSchema>;
 };

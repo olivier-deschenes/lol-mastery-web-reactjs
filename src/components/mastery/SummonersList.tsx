@@ -1,6 +1,5 @@
-import { useQuery } from "@tanstack/react-query";
 import { useMasteryContext } from "../../contexts/MasteryContext";
-import { getMasteriesOptions } from "../../queries/getMasteriesOptions";
+import { useMasteries } from "../../queries/getMasteries";
 import { Route } from "../../routes/mastery";
 import { Summoner } from "./Summoner";
 
@@ -8,12 +7,12 @@ export function SummonersList() {
   const { mastery } = useMasteryContext();
 
   const { s } = Route.useSearch();
-  const q_masteries = useQuery(getMasteriesOptions({ s }));
+  const q_masteries = useMasteries(s);
 
-  const isFetching = q_masteries.isLoading || q_masteries.isPending;
+  const isFetching = q_masteries.some((q) => q.isLoading || q.isPending);
 
   return (
-    <div className="flex items-start md:items-center gap-1.5 md:gap-5 flex-col md:flex-row flex-wrap select-none">
+    <div className="flex items-start md:items-center md:gap-5 flex-col md:flex-row flex-wrap select-none">
       {isFetching
         ? Array.from({ length: s.length }).map((_, i) => (
             <div key={`fetching-summoner-${i}`}>

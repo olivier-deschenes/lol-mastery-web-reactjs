@@ -1,6 +1,5 @@
-import { useQuery } from "@tanstack/react-query";
 import { useMasteryContext } from "../../contexts/MasteryContext";
-import { getMasteriesOptions } from "../../queries/getMasteriesOptions";
+import { useMasteries } from "../../queries/getMasteries";
 import { Route } from "../../routes/mastery";
 import { Mastery } from "./Mastery";
 import { cn } from "../../lib/utils";
@@ -9,12 +8,12 @@ export function MasteryList() {
   const { mastery } = useMasteryContext();
 
   const { s } = Route.useSearch();
-  const q_masteries = useQuery(getMasteriesOptions({ s }));
+  const q_masteries = useMasteries(s);
 
-  const isFetching = q_masteries.isLoading || q_masteries.isPending;
+  const isFetching = q_masteries.some((q) => q.isLoading || q.isPending);
 
   return (
-    <div className="grid gap-5 grid-cols-2 md:grid-cols-3 lg:grid-cols-4 grid-rows-12">
+    <div className="grid gap-5 grid-cols-2 md:grid-cols-3 lg:grid-cols-4 grid-rows-12 pb-5">
       {isFetching
         ? Array.from({ length: 10 }).map((_, i) => (
             <div
