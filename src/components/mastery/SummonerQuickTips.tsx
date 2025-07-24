@@ -24,7 +24,7 @@ export function SummonerQuickTips() {
   if (!show) return null;
 
   return (
-    <Alert variant={"primary"} className={"relative"}>
+    <Alert variant={"default"} className={"relative"}>
       <KeyboardIcon className="h-4 w-4" />
       <AlertTitle>Quick Tips!</AlertTitle>
       <AlertDescription>

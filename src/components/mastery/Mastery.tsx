@@ -2,7 +2,7 @@ import { MultiMasteryInfoType } from "../../types/api";
 import { cn, formatter } from "../../lib/utils";
 import { useMasteryContext } from "../../contexts/MasteryContext";
 import { Tooltip } from "./Tooltip";
-import { Route } from "../../routes/mastery";
+import { Route } from "../../routes/$region/m";
 type Props = {
   mastery: MultiMasteryInfoType;
 };
@@ -31,7 +31,7 @@ export function Mastery({ mastery }: Props) {
         <div className="flex">
           <img
             src={mastery.champion.image}
-            className="rounded-md w-full md:h-[120px] aspect-square"
+            className="rounded-md w-full md:h-20 aspect-square"
           />
         </div>
         <div className="flex flex-1 flex-col justify-between">

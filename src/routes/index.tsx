@@ -4,7 +4,10 @@ export const Route = createFileRoute("/")({
   component: Index,
   beforeLoad: () => {
     throw redirect({
-      to: "/mastery",
+      to: "/$region/m",
+      params: {
+        region: "na1",
+      },
       search: {
         c: "",
         mSort: "desc",

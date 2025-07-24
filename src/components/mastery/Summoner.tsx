@@ -1,10 +1,11 @@
 import { cn } from "../../lib/utils";
 import { useMasteryContext } from "../../contexts/MasteryContext";
-import { Route } from "../../routes/mastery";
+import { Route } from "../../routes/$region/m";
 import { SummonerResponseType } from "../../types/api";
 import { useRefreshMastery } from "../../queries/getMasteries";
-import { RefreshCcwIcon } from "lucide-react";
+import { Link2Icon, RefreshCcwIcon } from "lucide-react";
 import { MouseEvent } from "react";
+import { Link } from "@tanstack/react-router";
 
 const timeAgo = (input: Date | number | string) => {
   const date = new Date(input).getTime();
@@ -137,6 +138,17 @@ export function Summoner({ summoner }: Props) {
             className={cn(m_mastery.isPending && "animate-spin")}
           />
         </button>
+      </div>
+      <div className={"px-4"}>
+        <Link
+          to={"/$region/s/$summonerName"}
+          params={{
+            region: Route.useParams().region,
+            summonerName: `${summoner.gameName}#${summoner.tagLine}`,
+          }}
+        >
+          <Link2Icon />
+        </Link>
       </div>
     </div>
   );

@@ -1,6 +1,6 @@
 import { useMasteryContext } from "../../contexts/MasteryContext";
 import { useMasteries } from "../../queries/getMasteries";
-import { Route } from "../../routes/mastery";
+import { Route } from "../../routes/$region/m";
 import { Mastery } from "./Mastery";
 import { cn } from "../../lib/utils";
 

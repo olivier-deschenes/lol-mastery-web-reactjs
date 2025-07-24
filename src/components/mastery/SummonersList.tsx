@@ -1,6 +1,6 @@
 import { useMasteryContext } from "../../contexts/MasteryContext";
 import { useMasteries } from "../../queries/getMasteries";
-import { Route } from "../../routes/mastery";
+import { Route } from "../../routes/$region/m";
 import { Summoner } from "./Summoner";
 
 export function SummonersList() {

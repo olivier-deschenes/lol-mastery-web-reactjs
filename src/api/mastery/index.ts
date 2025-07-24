@@ -6,12 +6,11 @@ export const getMasteryBySummonerName = async (
   name: string,
   refresh: boolean
 ) => {
-  const params = new URLSearchParams([
-    ["summonerName", encodeURIComponent(name)],
-    ["refresh", refresh ? "true" : "false"],
-  ]);
+  const params = new URLSearchParams([["refresh", refresh ? "true" : "false"]]);
 
-  const response = await apiClient.get(`mastery?${params.toString()}`).json();
+  const response = await apiClient
+    .get(`mastery/${encodeURIComponent(name)}?${params.toString()}`)
+    .json();
 
   return parse(MasteryResponseSchema, response);
 };

@@ -1,4 +1,4 @@
-import { useState, createContext, useMemo, useEffect } from "react";
+import { useState, useMemo, useEffect } from "react";
 import { Textarea } from "@/components/ui/textarea";
 import {
   ArrowDown01,
@@ -7,7 +7,6 @@ import {
   ArrowUpDownIcon,
   ArrowUpZAIcon,
   Eraser,
-  MedalIcon,
 } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import {
@@ -28,14 +27,12 @@ import {
   string,
 } from "valibot";
 import { createFileRoute } from "@tanstack/react-router";
-import { useMasteries } from "../../queries/getMasteries";
+import { useMasteries } from "../../../queries/getMasteries";
 import { Button } from "@/components/ui/button";
-import { SummonerQuickTips } from "../../components/mastery/SummonerQuickTips";
-import { SummonersList } from "../../components/mastery/SummonersList";
-import { MasteryList } from "../../components/mastery/MasteryList";
+import { SummonerQuickTips } from "../../../components/mastery/SummonerQuickTips";
+import { SummonersList } from "../../../components/mastery/SummonersList";
+import { MasteryList } from "../../../components/mastery/MasteryList";
 import { toast } from "sonner";
-
-export const MasteryContext = createContext(null);
 
 const sortSchema = picklist(["asc", "desc"]);
 
@@ -50,7 +47,7 @@ const MasterySearchParamSchema = object({
 
 type MasterySearchParamType = InferOutput<typeof MasterySearchParamSchema>;
 
-export const Route = createFileRoute("/mastery/")({
+export const Route = createFileRoute("/$region/m/")({
   component: Index,
   validateSearch: (search) => parse(MasterySearchParamSchema, search),
   loaderDeps: ({ search }) => ({
@@ -75,7 +72,7 @@ function Index() {
     if (firstError) {
       toast.error("An error occurred while fetching the data.");
 
-      navigate({ search: {} });
+      navigate({ search: true });
     }
   }, [firstError, navigate]);
 
@@ -191,16 +188,6 @@ function Index() {
   return (
     <MasteryProvider mastery={mergedData}>
       <div className="container flex flex-col mx-auto">
-        <header>
-          <h1
-            className={
-              "text-3xl font-bold py-5 text-primary flex gap-1.5 items-center"
-            }
-          >
-            <MedalIcon />
-            ChampionMastery.lol
-          </h1>
-        </header>
         <div className="flex flex-col w-full lg:w-1/2 justify-center items-center mx-auto gap-3">
           <div className="w-full">
             <Textarea
@@ -265,7 +252,7 @@ function Index() {
                 </Button>
                 <Button
                   variant="ghost"
-                  onClick={() => navigate({ search: {} })}
+                  onClick={() => navigate({ search: true })}
                 >
                   <Eraser className="w-4 mr-1" /> Clear Data
                 </Button>
