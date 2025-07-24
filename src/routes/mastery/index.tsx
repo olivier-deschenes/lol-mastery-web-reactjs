@@ -191,16 +191,6 @@ function Index() {
   return (
     <MasteryProvider mastery={mergedData}>
       <div className="container flex flex-col mx-auto">
-        <header>
-          <h1
-            className={
-              "text-3xl font-bold py-5 text-primary flex gap-1.5 items-center"
-            }
-          >
-            <MedalIcon />
-            ChampionMastery.lol
-          </h1>
-        </header>
         <div className="flex flex-col w-full lg:w-1/2 justify-center items-center mx-auto gap-3">
           <div className="w-full">
             <Textarea

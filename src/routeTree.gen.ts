@@ -11,14 +11,20 @@
 // Import Routes
 
 import { Route as rootRoute } from './routes/__root'
-import { Route as MatchImport } from './routes/match'
+import { Route as TermsImport } from './routes/terms'
+import { Route as PrivacyImport } from './routes/privacy'
 import { Route as IndexImport } from './routes/index'
 import { Route as MasteryIndexImport } from './routes/mastery/index'
 
 // Create/Update Routes
 
-const MatchRoute = MatchImport.update({
-  path: '/match',
+const TermsRoute = TermsImport.update({
+  path: '/terms',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const PrivacyRoute = PrivacyImport.update({
+  path: '/privacy',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -40,8 +46,12 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexImport
       parentRoute: typeof rootRoute
     }
-    '/match': {
-      preLoaderRoute: typeof MatchImport
+    '/privacy': {
+      preLoaderRoute: typeof PrivacyImport
+      parentRoute: typeof rootRoute
+    }
+    '/terms': {
+      preLoaderRoute: typeof TermsImport
       parentRoute: typeof rootRoute
     }
     '/mastery/': {
@@ -55,7 +65,8 @@ declare module '@tanstack/react-router' {
 
 export const routeTree = rootRoute.addChildren([
   IndexRoute,
-  MatchRoute,
+  PrivacyRoute,
+  TermsRoute,
   MasteryIndexRoute,
 ])
 
