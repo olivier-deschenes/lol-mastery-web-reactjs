@@ -1,57 +1,51 @@
-import {
-  array,
-  number,
-  object,
-  pipe,
-  string,
-  transform,
-  union,
-  InferOutput,
-  fallback,
-} from "valibot";
+import * as v from "valibot";
 
-export const SummonerMetadata = object({
-  refreshed_at: pipe(
-    union([string(), number()]),
-    transform((input) => new Date(input))
-  ),
-  hexColor: fallback(string(), "black"),
-});
-export type SummonerMetadataType = InferOutput<typeof SummonerMetadata>;
+const apiDateSchema = v.pipe(
+  v.string(),
+  v.transform((input) => new Date(input))
+);
 
-export const ChampionSchema = object({
-  id: string(),
-  key: string(),
-  name: string(),
-  title: string(),
-  image: string(),
-});
-export type ChampionType = InferOutput<typeof ChampionSchema>;
+export const IDSchema = v.pipe(
+  v.object({
+    puuid: v.string(),
+    profile_icon_id: v.number(),
+    revision_date: apiDateSchema,
+    summoner_level: v.number(),
+    riot_id: v.string(),
+    game_name: v.string(),
+    tag_line: v.string(),
+    created_at: apiDateSchema,
+  }),
+  v.transform((data) => ({
+    ...data,
+    metadata: {
+      hexColor: "black",
+    },
+  }))
+);
+export type IDType = v.InferOutput<typeof IDSchema>;
 
-export const SummonerSchema = object({
-  puuid: string(),
-  profileIconId: number(),
-  profileIconUrl: string(),
-  revisionDate: number(),
-  summonerLevel: number(),
-  gameName: string(),
-  tagLine: string(),
-  metadata: SummonerMetadata,
-});
-export type SummonerType = InferOutput<typeof SummonerSchema>;
+export const MasterySchema = v.object({
+  puuid: v.string(),
+  lastPlayTime: apiDateSchema,
+  level: v.number(),
+  points: v.number(),
 
-export const MasterySchema = object({
-  champion: ChampionSchema,
-  puuid: string(),
-  championLevel: number(),
-  championPoints: number(),
-  lastPlayTime: pipe(
-    union([string(), number()]),
-    transform((input) => new Date(input))
-  ),
+  champion: v.object({
+    id: v.number(),
+    name: v.string(),
+    image: v.object({
+      full: v.string(),
+      sprite: v.string(),
+    }),
+  }),
 });
-export type MasteryType = InferOutput<typeof MasterySchema>;
-export const MasteryResponseSchema = object({
-  mastery: array(MasterySchema),
-  summoner: SummonerSchema,
+export type MasteryType = v.InferOutput<typeof MasterySchema>;
+export const MasteryResponseSchema = v.object({
+  mastery: v.object({
+    puuid: v.string(),
+    data: v.array(MasterySchema),
+    created_at: apiDateSchema,
+  }),
+  id: IDSchema,
 });

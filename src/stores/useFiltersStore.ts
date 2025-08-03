@@ -1,15 +1,15 @@
 import { create } from "zustand";
-import { SummonerType } from "../api/mastery/types";
+import { IDType } from "../api/mastery/types";
 
 interface State {
   championName: string;
-  summoners: Array<SummonerType["puuid"]>;
+  summoners: Array<IDType["puuid"]>;
   sortDirection: "asc" | "desc";
 
   changeChampionName: (name: string) => void;
 
-  toggleSummoner: (puuid: SummonerType["puuid"]) => void;
-  setSummoners: (puuids: Array<SummonerType["puuid"]>) => void;
+  toggleSummoner: (puuid: IDType["puuid"]) => void;
+  setSummoners: (puuids: Array<IDType["puuid"]>) => void;
 
   toggleSortDirection: () => void;
 }

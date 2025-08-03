@@ -3,6 +3,7 @@ import { cn, formatter } from "../../lib/utils";
 import { useMasteryContext } from "../../contexts/MasteryContext";
 import { Tooltip } from "./Tooltip";
 import { Route } from "../../routes/mastery";
+import { useLoaderData } from "@tanstack/react-router";
 type Props = {
   mastery: MultiMasteryInfoType;
 };
@@ -10,6 +11,7 @@ type Props = {
 export function Mastery({ mastery }: Props) {
   const { c, hs } = Route.useSearch();
   const navigate = Route.useNavigate();
+  const { urls } = useLoaderData({ from: "__root__" });
 
   const { getSummonerFromPuuid, getSummonerIndexFromPuuid } =
     useMasteryContext();
@@ -30,7 +32,7 @@ export function Mastery({ mastery }: Props) {
       <div className="flex rounded-md flex-col md:flex-row gap-3">
         <div className="flex">
           <img
-            src={mastery.champion.image}
+            src={urls.getChampionFullImage(mastery.champion.image.full)}
             className="rounded-md w-full md:h-[120px] aspect-square"
           />
         </div>
@@ -55,9 +57,7 @@ export function Mastery({ mastery }: Props) {
                 <div
                   key={`mastery-${m.puuid}`}
                   style={{
-                    width: `${
-                      (m.championPoints / mastery.totalChampionPoints) * 100
-                    }%`,
+                    width: `${(m.points / mastery.totalChampionPoints) * 100}%`,
                     backgroundColor: `${summoner.metadata.hexColor}`,
                     opacity: hs === null || hs === index ? 1 : 0.3,
                   }}

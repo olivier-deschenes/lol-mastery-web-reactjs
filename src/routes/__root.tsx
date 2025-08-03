@@ -14,6 +14,8 @@ import {
   RefAttributes,
 } from "react";
 import { ListChecks, LucideProps, MedalIcon, ScrollText } from "lucide-react";
+import { fetchMetadata } from "@/queries/getMetadata";
+import { IDType, MasteryType } from "@/api/mastery/types";
 
 interface Context {
   queryClient: QueryClient;
@@ -50,6 +52,23 @@ const NavigationItem = ({
 };
 
 export const Route = createRootRouteWithContext<Context>()({
+  loader: async () => {
+    const data = await fetchMetadata();
+
+    const version = data.LOL_LATEST_VESION;
+
+    return {
+      ...data,
+      urls: {
+        getProfileIconUrl: (profileIconId: IDType["profile_icon_id"]) =>
+          `https://ddragon.leagueoflegends.com/cdn/${version}/img/profileicon/${profileIconId}.png`,
+        getChampionFullImage: (
+          fullImage: MasteryType["champion"]["image"]["full"]
+        ) =>
+          `https://ddragon.leagueoflegends.com/cdn/${version}/img/champion/${fullImage}`,
+      },
+    };
+  },
   component: () => (
     <div className={"flex flex-col gap-5"}>
       <nav className={"flex w-full p-3 border-b"}>
