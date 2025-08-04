@@ -1,7 +1,7 @@
-import { useEffect, useState } from "react";
-import { Alert, AlertDescription, AlertTitle } from "../ui/alert";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { Button } from "@/components/ui/button";
 import { KeyboardIcon, XIcon } from "lucide-react";
-import { Button } from "../ui/button";
+import { useState, useEffect } from "react";
 
 export const SUMMONER_QUICK_TIPS_DISMISSED = "quick-tips-dismissed";
 
@@ -24,7 +24,7 @@ export function SummonerQuickTips() {
   if (!show) return null;
 
   return (
-    <Alert variant={"default"} className={"relative"}>
+    <Alert variant={"primary"} className={"relative"}>
       <KeyboardIcon className="h-4 w-4" />
       <AlertTitle>Quick Tips!</AlertTitle>
       <AlertDescription>

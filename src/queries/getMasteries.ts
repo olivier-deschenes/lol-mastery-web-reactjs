@@ -18,26 +18,20 @@ const COLORS = [
   "#9B5DE5", // Purple
 ];
 
-export const getMasteryOptions = (
-  s: string,
-  i: number,
-  refresh: boolean = false
-) =>
+export const getMasteryOptions = (s: string, i: number) =>
   queryOptions({
     queryKey: ["mastery", s],
     retry: false,
     refetchInterval: false,
     queryFn: async () => {
-      await new Promise((resolve) => setTimeout(resolve, 1000));
-
-      const m = await getMasteryBySummonerName(s, refresh);
+      const m = await getMasteryBySummonerName("na1", s);
 
       return {
         ...m,
-        summoner: {
-          ...m.summoner,
+        id: {
+          ...m.id,
           metadata: {
-            ...m.summoner.metadata,
+            ...m.id.metadata,
             hexColor: COLORS[i],
           },
         },
@@ -57,9 +51,9 @@ export const useRefreshMastery = () => {
     mutationFn: async ({ s, hexColor }: { s: string; hexColor: string }) => {
       await new Promise((resolve) => setTimeout(resolve, 1000));
 
-      const data = await getMasteryBySummonerName(s, true);
+      const data = await getMasteryBySummonerName("na1", s, true);
 
-      data.summoner.metadata.hexColor = hexColor;
+      data.id.metadata.hexColor = hexColor;
 
       qc.setQueryData(["mastery", s], data);
     },

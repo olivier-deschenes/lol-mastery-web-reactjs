@@ -1,9 +1,9 @@
 import { createFileRoute } from "@tanstack/react-router";
 
-export const Route = createFileRoute("/$region/s/")({
+export const Route = createFileRoute("/$platform/s/")({
   component: RouteComponent,
 });
 
 function RouteComponent() {
-  return <div>Hello</div>;
+  return <div>Hello "/$platform/s/"!</div>;
 }

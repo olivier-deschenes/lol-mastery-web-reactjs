@@ -1,38 +1,36 @@
-import { useState, useMemo, useEffect } from "react";
+import type {
+  MultiSummonerMasteryType,
+  MultiMasteryInfoType,
+} from "@/api/mastery/types";
+import { MasteryList } from "@/components/mastery/MasteryList";
+import { SummonerQuickTips } from "@/components/mastery/SummonerQuickTips";
+import { SummonersList } from "@/components/mastery/SummonersList";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
+import { MasteryProvider } from "@/contexts/MasteryContext";
+import { useMasteries } from "@/queries/getMasteries";
+import { createFileRoute } from "@tanstack/react-router";
 import {
-  ArrowDown01,
-  ArrowDownAZIcon,
-  ArrowUp10Icon,
   ArrowUpDownIcon,
+  ArrowDownAZIcon,
   ArrowUpZAIcon,
+  ArrowDown01,
+  ArrowUp10Icon,
   Eraser,
 } from "lucide-react";
-import { Input } from "@/components/ui/input";
+import { useState, useMemo, useEffect } from "react";
 import {
-  MasteryResponseType,
-  MultiMasteryInfoType,
-  MultiSummonerMasteryType,
-} from "@/types/api";
-import { MasteryProvider } from "@/contexts/MasteryContext";
-import {
-  array,
-  InferOutput,
-  nullable,
-  number,
+  picklist,
   object,
   optional,
-  parse,
-  picklist,
+  array,
   string,
+  nullable,
+  number,
+  type InferOutput,
+  parse,
 } from "valibot";
-import { createFileRoute } from "@tanstack/react-router";
-import { useMasteries } from "../../../queries/getMasteries";
-import { Button } from "@/components/ui/button";
-import { SummonerQuickTips } from "../../../components/mastery/SummonerQuickTips";
-import { SummonersList } from "../../../components/mastery/SummonersList";
-import { MasteryList } from "../../../components/mastery/MasteryList";
-import { toast } from "sonner";
 
 const sortSchema = picklist(["asc", "desc"]);
 
@@ -47,12 +45,9 @@ const MasterySearchParamSchema = object({
 
 type MasterySearchParamType = InferOutput<typeof MasterySearchParamSchema>;
 
-export const Route = createFileRoute("/$region/m/")({
+export const Route = createFileRoute("/mastery/")({
   component: Index,
   validateSearch: (search) => parse(MasterySearchParamSchema, search),
-  loaderDeps: ({ search }) => ({
-    s: search.s,
-  }),
 });
 
 function Index() {
@@ -70,8 +65,6 @@ function Index() {
 
   useEffect(() => {
     if (firstError) {
-      toast.error("An error occurred while fetching the data.");
-
       navigate({ search: true });
     }
   }, [firstError, navigate]);
@@ -81,20 +74,16 @@ function Index() {
 
     if (!allFetched) return { summoners: [], mastery: [] };
 
-    const data = q_masteries.reduce<MasteryResponseType[]>((acc, q) => {
-      acc.push(q.data!);
+    const data = q_masteries.map((m) => m.data!);
 
-      return acc;
-    }, []);
+    const ids = data.map((m) => m.id);
+    const masteries = data.map((m) => m.mastery.data).flat();
 
-    const summoners = data.map((m) => m.summoner);
-    const mastery = data.map((m) => m.mastery).flat();
+    const masteryMap = new Map<number, MultiMasteryInfoType>();
 
-    const masteryMap = new Map<string, MultiMasteryInfoType>();
-
-    mastery.forEach((m) => {
+    masteries.forEach((m) => {
       const key = m.champion.id;
-      const summonerIndex = summoners.findIndex((s) => s.puuid === m.puuid)!;
+      const summonerIndex = ids.findIndex((s) => s.puuid === m.puuid)!;
 
       if (!fs.includes(summonerIndex)) {
         return;
@@ -105,32 +94,27 @@ function Index() {
           champion: m.champion,
           data: [
             {
-              championLevel: m.championLevel,
-              championPoints: m.championPoints,
               lastPlayTime: m.lastPlayTime,
+              level: m.level,
+              points: m.points,
               puuid: m.puuid,
             },
           ],
-          totalChampionPoints: m.championPoints,
+          totalChampionPoints: m.points,
         });
       } else {
         const current = masteryMap.get(key)!;
 
-        current.data.push({
-          championLevel: m.championLevel,
-          championPoints: m.championPoints,
-          lastPlayTime: m.lastPlayTime,
-          puuid: m.puuid,
-        });
+        current.data.push(m);
 
-        current.totalChampionPoints += m.championPoints;
+        current.totalChampionPoints += m.points;
 
         masteryMap.set(key, current);
       }
     });
 
     const multiMastery = {
-      summoners,
+      summoners: ids,
       mastery: Array.from(masteryMap.values()),
     };
 

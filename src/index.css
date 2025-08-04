@@ -1,6 +1,20 @@
 @import "tailwindcss";
 @import "tw-animate-css";
 
+@theme {
+  --color-lose: #59343B;
+  --color-lose-300: #C9374C;
+  --color-lose-900: #703C47;
+
+  --color-win: #27344E;
+  --color-win-300: #4A75CE;
+  --color-win-900: #2F436E;
+
+  --color-match: black;
+  --color-match-300: black;
+  --color-match-900: black;
+}
+
 @custom-variant dark (&:is(.dark *));
 
 @theme inline {
@@ -118,33 +132,4 @@
   body {
     @apply bg-background text-foreground;
   }
-}
-
-@layer base {
-  :root {
-    --sidebar: oklch(0.985 0 0);
-    --sidebar-foreground: oklch(0.145 0 0);
-    --sidebar-primary: oklch(0.205 0 0);
-    --sidebar-primary-foreground: oklch(0.985 0 0);
-    --sidebar-accent: oklch(0.97 0 0);
-    --sidebar-accent-foreground: oklch(0.205 0 0);
-    --sidebar-border: oklch(0.922 0 0);
-    --sidebar-ring: oklch(0.708 0 0);
-  }
-
-  .dark {
-    --sidebar: oklch(0.205 0 0);
-    --sidebar-foreground: oklch(0.985 0 0);
-    --sidebar-primary: oklch(0.488 0.243 264.376);
-    --sidebar-primary-foreground: oklch(0.985 0 0);
-    --sidebar-accent: oklch(0.269 0 0);
-    --sidebar-accent-foreground: oklch(0.985 0 0);
-    --sidebar-border: oklch(1 0 0 / 10%);
-    --sidebar-ring: oklch(0.439 0 0);
-  }
-}
-
-:root {
-  --nav-height: 5rem;
-  --body-height: calc(100% - var(--nav-height))
 }

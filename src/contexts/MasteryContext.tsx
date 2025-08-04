@@ -1,16 +1,23 @@
-import { PropsWithChildren, createContext, useContext, useMemo } from "react";
-import { SummonerType } from "../api/mastery/types";
-import { MultiSummonerMasteryType } from "../types/api";
+import type {
+  MasteryIDType,
+  MultiSummonerMasteryType,
+} from "@/api/mastery/types";
+import {
+  type PropsWithChildren,
+  createContext,
+  useContext,
+  useMemo,
+} from "react";
 
 type MasteryContextType = {
   mastery: MultiSummonerMasteryType;
 
-  getSummonerFromPuuid: (puuid: SummonerType["puuid"]) => SummonerType;
-  getSummonerFromIndex: (index: number) => SummonerType;
-  getSummonerIndexFromPuuid: (puuid: SummonerType["puuid"]) => number;
+  getSummonerFromPuuid: (puuid: MasteryIDType["puuid"]) => MasteryIDType;
+  getSummonerFromIndex: (index: number) => MasteryIDType;
+  getSummonerIndexFromPuuid: (puuid: MasteryIDType["puuid"]) => number;
 
-  summonerIndexesToPuuids: (indexes: number[]) => SummonerType["puuid"][];
-  summonerPuuidsToIndexes: (puuids: SummonerType["puuid"][]) => number[];
+  summonerIndexesToPuuids: (indexes: number[]) => MasteryIDType["puuid"][];
+  summonerPuuidsToIndexes: (puuids: MasteryIDType["puuid"][]) => number[];
 };
 
 const context = createContext<MasteryContextType>({} as MasteryContextType);
@@ -37,19 +44,19 @@ export const MasteryProvider: React.FC<PropsWithChildren<Props>> = ({
   const value = useMemo<MasteryContextType>(() => {
     return {
       mastery,
-      getSummonerFromPuuid: (puuid: SummonerType["puuid"]) => {
+      getSummonerFromPuuid: (puuid: MasteryIDType["puuid"]) => {
         return mastery.summoners.find((s) => s.puuid === puuid)!;
       },
       getSummonerFromIndex: (index: number) => {
         return mastery.summoners[index];
       },
-      getSummonerIndexFromPuuid: (puuid: SummonerType["puuid"]) => {
+      getSummonerIndexFromPuuid: (puuid: MasteryIDType["puuid"]) => {
         return mastery.summoners.findIndex((s) => s.puuid === puuid);
       },
       summonerIndexesToPuuids: (indexes: number[]) => {
         return indexes.map((index) => mastery.summoners[index].puuid);
       },
-      summonerPuuidsToIndexes: (puuids: SummonerType["puuid"][]) => {
+      summonerPuuidsToIndexes: (puuids: MasteryIDType["puuid"][]) => {
         return puuids.map((puuid) =>
           mastery.summoners.findIndex((s) => s.puuid === puuid)
         );

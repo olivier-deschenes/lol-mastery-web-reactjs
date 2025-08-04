@@ -1,11 +1,9 @@
-import { cn } from "../../lib/utils";
-import { useMasteryContext } from "../../contexts/MasteryContext";
-import { Route } from "../../routes/$region/m";
-import { SummonerResponseType } from "../../types/api";
-import { useRefreshMastery } from "../../queries/getMasteries";
-import { Link2Icon, RefreshCcwIcon } from "lucide-react";
-import { MouseEvent } from "react";
-import { Link } from "@tanstack/react-router";
+import type { MasteryIDType } from "@/api/mastery/types";
+import { useMasteryContext } from "@/contexts/MasteryContext";
+import { cn } from "@/lib/utils";
+import { useRefreshMastery } from "@/queries/getMasteries";
+import { useLoaderData, useNavigate, useSearch } from "@tanstack/react-router";
+import { RefreshCcwIcon } from "lucide-react";
 
 const timeAgo = (input: Date | number | string) => {
   const date = new Date(input).getTime();
@@ -31,12 +29,14 @@ const timeAgo = (input: Date | number | string) => {
 };
 
 type Props = {
-  summoner: SummonerResponseType;
+  summoner: MasteryIDType;
 };
 
 export function Summoner({ summoner }: Props) {
-  const { fs } = Route.useSearch();
-  const navigate = Route.useNavigate();
+  const { fs } = useSearch({ from: "/mastery/" });
+  const navigate = useNavigate({ from: "/mastery" });
+
+  const { urls } = useLoaderData({ from: "__root__" });
 
   const {
     mastery: { summoners },
@@ -93,11 +93,14 @@ export function Summoner({ summoner }: Props) {
 
   const m_mastery = useRefreshMastery();
 
-  const handleRefresh = (e: MouseEvent<HTMLButtonElement>) => {
+  const handleRefresh = (
+    e: React.MouseEvent<HTMLButtonElement, MouseEvent>
+  ) => {
     e.preventDefault();
     e.stopPropagation();
+
     m_mastery.mutate({
-      s: `${summoner.gameName}#${summoner.tagLine}`,
+      s: `${summoner.game_name}#${summoner.tag_line}`,
       hexColor: summoner.metadata.hexColor,
     });
   };
@@ -113,14 +116,14 @@ export function Summoner({ summoner }: Props) {
       style={{ borderColor: summoner.metadata.hexColor }}
     >
       <img
-        src={summoner.profileIconUrl}
+        src={urls.getProfileIconUrl(summoner.profile_icon_id)}
         className="w-12 rounded-l-md cursor-pointer hover:opacity-80"
         onClick={handleToggleSummoner}
       />
       <div className={"px-3 "}>
         <div className="font-semibold">
-          <span>{summoner.gameName}</span>
-          <span className="text-slate-600">#{summoner.tagLine}</span>
+          <span>{summoner.game_name}</span>
+          <span className="text-slate-600">#{summoner.tag_line}</span>
         </div>
         <button
           className={
@@ -129,26 +132,13 @@ export function Summoner({ summoner }: Props) {
           onClick={handleRefresh}
         >
           <span className={"font-mono px-1.5 text-xs"}>
-            {m_mastery.isPending
-              ? "refreshing"
-              : timeAgo(summoner.metadata.refreshed_at)}
+            {m_mastery.isPending ? "refreshing" : timeAgo(summoner.created_at)}
           </span>
           <RefreshCcwIcon
             size={10}
             className={cn(m_mastery.isPending && "animate-spin")}
           />
         </button>
-      </div>
-      <div className={"px-4"}>
-        <Link
-          to={"/$region/s/$summonerName"}
-          params={{
-            region: Route.useParams().region,
-            summonerName: `${summoner.gameName}#${summoner.tagLine}`,
-          }}
-        >
-          <Link2Icon />
-        </Link>
       </div>
     </div>
   );

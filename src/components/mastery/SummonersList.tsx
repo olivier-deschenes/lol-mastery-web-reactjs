@@ -1,12 +1,12 @@
-import { useMasteryContext } from "../../contexts/MasteryContext";
-import { useMasteries } from "../../queries/getMasteries";
-import { Route } from "../../routes/$region/m";
-import { Summoner } from "./Summoner";
+import { Summoner } from "@/components/mastery/Summoner";
+import { useMasteryContext } from "@/contexts/MasteryContext";
+import { useMasteries } from "@/queries/getMasteries";
+import { useSearch } from "@tanstack/react-router";
 
 export function SummonersList() {
   const { mastery } = useMasteryContext();
 
-  const { s } = Route.useSearch();
+  const { s } = useSearch({ from: "/mastery/" });
   const q_masteries = useMasteries(s);
 
   const isFetching = q_masteries.some((q) => q.isLoading || q.isPending);

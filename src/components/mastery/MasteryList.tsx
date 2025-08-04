@@ -1,13 +1,13 @@
-import { useMasteryContext } from "../../contexts/MasteryContext";
-import { useMasteries } from "../../queries/getMasteries";
-import { Route } from "../../routes/$region/m";
-import { Mastery } from "./Mastery";
-import { cn } from "../../lib/utils";
+import { Mastery } from "@/components/mastery/Mastery";
+import { useMasteryContext } from "@/contexts/MasteryContext";
+import { cn } from "@/lib/utils";
+import { useMasteries } from "@/queries/getMasteries";
+import { useSearch } from "@tanstack/react-router";
 
 export function MasteryList() {
   const { mastery } = useMasteryContext();
 
-  const { s } = Route.useSearch();
+  const { s } = useSearch({ from: "/mastery/" });
   const q_masteries = useMasteries(s);
 
   const isFetching = q_masteries.some((q) => q.isLoading || q.isPending);

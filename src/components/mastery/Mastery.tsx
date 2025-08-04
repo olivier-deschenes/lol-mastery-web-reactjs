@@ -1,15 +1,17 @@
-import { MultiMasteryInfoType } from "../../types/api";
-import { cn, formatter } from "../../lib/utils";
-import { useMasteryContext } from "../../contexts/MasteryContext";
-import { Tooltip } from "./Tooltip";
-import { Route } from "../../routes/$region/m";
+import type { MultiMasteryInfoType } from "@/api/mastery/types";
+import { Tooltip } from "@/components/mastery/Tooltip";
+import { useMasteryContext } from "@/contexts/MasteryContext";
+import { cn, formatter } from "@/lib/utils";
+import { useSearch, useNavigate, useLoaderData } from "@tanstack/react-router";
+
 type Props = {
   mastery: MultiMasteryInfoType;
 };
 
 export function Mastery({ mastery }: Props) {
-  const { c, hs } = Route.useSearch();
-  const navigate = Route.useNavigate();
+  const { c, hs } = useSearch({ from: "/mastery/" });
+  const navigate = useNavigate({ from: "/mastery" });
+  const { urls } = useLoaderData({ from: "__root__" });
 
   const { getSummonerFromPuuid, getSummonerIndexFromPuuid } =
     useMasteryContext();
@@ -30,8 +32,8 @@ export function Mastery({ mastery }: Props) {
       <div className="flex rounded-md flex-col md:flex-row gap-3">
         <div className="flex">
           <img
-            src={mastery.champion.image}
-            className="rounded-md w-full md:h-20 aspect-square"
+            src={urls.getChampionFullImage(mastery.champion.image.full)}
+            className="rounded-md w-full md:h-[120px] aspect-square"
           />
         </div>
         <div className="flex flex-1 flex-col justify-between">
@@ -55,9 +57,7 @@ export function Mastery({ mastery }: Props) {
                 <div
                   key={`mastery-${m.puuid}`}
                   style={{
-                    width: `${
-                      (m.championPoints / mastery.totalChampionPoints) * 100
-                    }%`,
+                    width: `${(m.points / mastery.totalChampionPoints) * 100}%`,
                     backgroundColor: `${summoner.metadata.hexColor}`,
                     opacity: hs === null || hs === index ? 1 : 0.3,
                   }}

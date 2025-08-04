@@ -3,14 +3,24 @@ import { apiClient } from "../../lib/utils";
 import { MasteryResponseSchema } from "./types";
 
 export const getMasteryBySummonerName = async (
-  name: string,
-  refresh: boolean
+  platform: string,
+  riotID: string,
+  refresh: boolean = false
 ) => {
-  const params = new URLSearchParams([["refresh", refresh ? "true" : "false"]]);
+  try {
+    const searchParams = new URLSearchParams([
+      ["refresh", refresh ? "1" : "0"],
+    ]);
 
-  const response = await apiClient
-    .get(`mastery/${encodeURIComponent(name)}?${params.toString()}`)
-    .json();
+    const response = await apiClient
+      .get(
+        `${platform}/${encodeURIComponent(riotID)}/mastery?${searchParams.toString()}`
+      )
+      .json();
+    return parse(MasteryResponseSchema, response);
+  } catch (e) {
+    console.error(e);
 
-  return parse(MasteryResponseSchema, response);
+    throw e;
+  }
 };

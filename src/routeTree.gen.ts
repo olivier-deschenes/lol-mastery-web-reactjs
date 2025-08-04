@@ -9,21 +9,22 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
-import { Route as MatchRouteImport } from './routes/match'
-import { Route as RegionRouteRouteImport } from './routes/$region/route'
+import { Route as TermsRouteImport } from './routes/terms'
+import { Route as PrivacyRouteImport } from './routes/privacy'
 import { Route as IndexRouteImport } from './routes/index'
-import { Route as RegionSIndexRouteImport } from './routes/$region/s/index'
-import { Route as RegionMIndexRouteImport } from './routes/$region/m/index'
-import { Route as RegionSSummonerNameRouteImport } from './routes/$region/s/$summonerName'
+import { Route as MasteryIndexRouteImport } from './routes/mastery/index'
+import { Route as PlatformIndexRouteImport } from './routes/$platform/index'
+import { Route as PlatformSIndexRouteImport } from './routes/$platform/s/index'
+import { Route as PlatformSIdRouteImport } from './routes/$platform/s/$id'
 
-const MatchRoute = MatchRouteImport.update({
-  id: '/match',
-  path: '/match',
+const TermsRoute = TermsRouteImport.update({
+  id: '/terms',
+  path: '/terms',
   getParentRoute: () => rootRouteImport,
 } as any)
-const RegionRouteRoute = RegionRouteRouteImport.update({
-  id: '/$region',
-  path: '/$region',
+const PrivacyRoute = PrivacyRouteImport.update({
+  id: '/privacy',
+  path: '/privacy',
   getParentRoute: () => rootRouteImport,
 } as any)
 const IndexRoute = IndexRouteImport.update({
@@ -31,94 +32,109 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
-const RegionSIndexRoute = RegionSIndexRouteImport.update({
-  id: '/s/',
-  path: '/s/',
-  getParentRoute: () => RegionRouteRoute,
+const MasteryIndexRoute = MasteryIndexRouteImport.update({
+  id: '/mastery/',
+  path: '/mastery/',
+  getParentRoute: () => rootRouteImport,
 } as any)
-const RegionMIndexRoute = RegionMIndexRouteImport.update({
-  id: '/m/',
-  path: '/m/',
-  getParentRoute: () => RegionRouteRoute,
+const PlatformIndexRoute = PlatformIndexRouteImport.update({
+  id: '/$platform/',
+  path: '/$platform/',
+  getParentRoute: () => rootRouteImport,
 } as any)
-const RegionSSummonerNameRoute = RegionSSummonerNameRouteImport.update({
-  id: '/s/$summonerName',
-  path: '/s/$summonerName',
-  getParentRoute: () => RegionRouteRoute,
+const PlatformSIndexRoute = PlatformSIndexRouteImport.update({
+  id: '/$platform/s/',
+  path: '/$platform/s/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PlatformSIdRoute = PlatformSIdRouteImport.update({
+  id: '/$platform/s/$id',
+  path: '/$platform/s/$id',
+  getParentRoute: () => rootRouteImport,
 } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
-  '/$region': typeof RegionRouteRouteWithChildren
-  '/match': typeof MatchRoute
-  '/$region/s/$summonerName': typeof RegionSSummonerNameRoute
-  '/$region/m': typeof RegionMIndexRoute
-  '/$region/s': typeof RegionSIndexRoute
+  '/privacy': typeof PrivacyRoute
+  '/terms': typeof TermsRoute
+  '/$platform': typeof PlatformIndexRoute
+  '/mastery': typeof MasteryIndexRoute
+  '/$platform/s/$id': typeof PlatformSIdRoute
+  '/$platform/s': typeof PlatformSIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '/$region': typeof RegionRouteRouteWithChildren
-  '/match': typeof MatchRoute
-  '/$region/s/$summonerName': typeof RegionSSummonerNameRoute
-  '/$region/m': typeof RegionMIndexRoute
-  '/$region/s': typeof RegionSIndexRoute
+  '/privacy': typeof PrivacyRoute
+  '/terms': typeof TermsRoute
+  '/$platform': typeof PlatformIndexRoute
+  '/mastery': typeof MasteryIndexRoute
+  '/$platform/s/$id': typeof PlatformSIdRoute
+  '/$platform/s': typeof PlatformSIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
-  '/$region': typeof RegionRouteRouteWithChildren
-  '/match': typeof MatchRoute
-  '/$region/s/$summonerName': typeof RegionSSummonerNameRoute
-  '/$region/m/': typeof RegionMIndexRoute
-  '/$region/s/': typeof RegionSIndexRoute
+  '/privacy': typeof PrivacyRoute
+  '/terms': typeof TermsRoute
+  '/$platform/': typeof PlatformIndexRoute
+  '/mastery/': typeof MasteryIndexRoute
+  '/$platform/s/$id': typeof PlatformSIdRoute
+  '/$platform/s/': typeof PlatformSIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
-    | '/$region'
-    | '/match'
-    | '/$region/s/$summonerName'
-    | '/$region/m'
-    | '/$region/s'
+    | '/privacy'
+    | '/terms'
+    | '/$platform'
+    | '/mastery'
+    | '/$platform/s/$id'
+    | '/$platform/s'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
-    | '/$region'
-    | '/match'
-    | '/$region/s/$summonerName'
-    | '/$region/m'
-    | '/$region/s'
+    | '/privacy'
+    | '/terms'
+    | '/$platform'
+    | '/mastery'
+    | '/$platform/s/$id'
+    | '/$platform/s'
   id:
     | '__root__'
     | '/'
-    | '/$region'
-    | '/match'
-    | '/$region/s/$summonerName'
-    | '/$region/m/'
-    | '/$region/s/'
+    | '/privacy'
+    | '/terms'
+    | '/$platform/'
+    | '/mastery/'
+    | '/$platform/s/$id'
+    | '/$platform/s/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
-  RegionRouteRoute: typeof RegionRouteRouteWithChildren
-  MatchRoute: typeof MatchRoute
+  PrivacyRoute: typeof PrivacyRoute
+  TermsRoute: typeof TermsRoute
+  PlatformIndexRoute: typeof PlatformIndexRoute
+  MasteryIndexRoute: typeof MasteryIndexRoute
+  PlatformSIdRoute: typeof PlatformSIdRoute
+  PlatformSIndexRoute: typeof PlatformSIndexRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/match': {
-      id: '/match'
-      path: '/match'
-      fullPath: '/match'
-      preLoaderRoute: typeof MatchRouteImport
+    '/terms': {
+      id: '/terms'
+      path: '/terms'
+      fullPath: '/terms'
+      preLoaderRoute: typeof TermsRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/$region': {
-      id: '/$region'
-      path: '/$region'
-      fullPath: '/$region'
-      preLoaderRoute: typeof RegionRouteRouteImport
+    '/privacy': {
+      id: '/privacy'
+      path: '/privacy'
+      fullPath: '/privacy'
+      preLoaderRoute: typeof PrivacyRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/': {
@@ -128,50 +144,45 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/$region/s/': {
-      id: '/$region/s/'
-      path: '/s'
-      fullPath: '/$region/s'
-      preLoaderRoute: typeof RegionSIndexRouteImport
-      parentRoute: typeof RegionRouteRoute
+    '/mastery/': {
+      id: '/mastery/'
+      path: '/mastery'
+      fullPath: '/mastery'
+      preLoaderRoute: typeof MasteryIndexRouteImport
+      parentRoute: typeof rootRouteImport
     }
-    '/$region/m/': {
-      id: '/$region/m/'
-      path: '/m'
-      fullPath: '/$region/m'
-      preLoaderRoute: typeof RegionMIndexRouteImport
-      parentRoute: typeof RegionRouteRoute
+    '/$platform/': {
+      id: '/$platform/'
+      path: '/$platform'
+      fullPath: '/$platform'
+      preLoaderRoute: typeof PlatformIndexRouteImport
+      parentRoute: typeof rootRouteImport
     }
-    '/$region/s/$summonerName': {
-      id: '/$region/s/$summonerName'
-      path: '/s/$summonerName'
-      fullPath: '/$region/s/$summonerName'
-      preLoaderRoute: typeof RegionSSummonerNameRouteImport
-      parentRoute: typeof RegionRouteRoute
+    '/$platform/s/': {
+      id: '/$platform/s/'
+      path: '/$platform/s'
+      fullPath: '/$platform/s'
+      preLoaderRoute: typeof PlatformSIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/$platform/s/$id': {
+      id: '/$platform/s/$id'
+      path: '/$platform/s/$id'
+      fullPath: '/$platform/s/$id'
+      preLoaderRoute: typeof PlatformSIdRouteImport
+      parentRoute: typeof rootRouteImport
     }
   }
 }
 
-interface RegionRouteRouteChildren {
-  RegionSSummonerNameRoute: typeof RegionSSummonerNameRoute
-  RegionMIndexRoute: typeof RegionMIndexRoute
-  RegionSIndexRoute: typeof RegionSIndexRoute
-}
-
-const RegionRouteRouteChildren: RegionRouteRouteChildren = {
-  RegionSSummonerNameRoute: RegionSSummonerNameRoute,
-  RegionMIndexRoute: RegionMIndexRoute,
-  RegionSIndexRoute: RegionSIndexRoute,
-}
-
-const RegionRouteRouteWithChildren = RegionRouteRoute._addFileChildren(
-  RegionRouteRouteChildren,
-)
-
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
-  RegionRouteRoute: RegionRouteRouteWithChildren,
-  MatchRoute: MatchRoute,
+  PrivacyRoute: PrivacyRoute,
+  TermsRoute: TermsRoute,
+  PlatformIndexRoute: PlatformIndexRoute,
+  MasteryIndexRoute: MasteryIndexRoute,
+  PlatformSIdRoute: PlatformSIdRoute,
+  PlatformSIndexRoute: PlatformSIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
