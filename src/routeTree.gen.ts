@@ -12,6 +12,7 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as TermsRouteImport } from './routes/terms'
 import { Route as PrivacyRouteImport } from './routes/privacy'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as UserIndexRouteImport } from './routes/user/index'
 import { Route as MasteryIndexRouteImport } from './routes/mastery/index'
 import { Route as PlatformIndexRouteImport } from './routes/$platform/index'
 import { Route as PlatformSIndexRouteImport } from './routes/$platform/s/index'
@@ -30,6 +31,11 @@ const PrivacyRoute = PrivacyRouteImport.update({
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const UserIndexRoute = UserIndexRouteImport.update({
+  id: '/user/',
+  path: '/user/',
   getParentRoute: () => rootRouteImport,
 } as any)
 const MasteryIndexRoute = MasteryIndexRouteImport.update({
@@ -59,6 +65,7 @@ export interface FileRoutesByFullPath {
   '/terms': typeof TermsRoute
   '/$platform': typeof PlatformIndexRoute
   '/mastery': typeof MasteryIndexRoute
+  '/user': typeof UserIndexRoute
   '/$platform/s/$id': typeof PlatformSIdRoute
   '/$platform/s': typeof PlatformSIndexRoute
 }
@@ -68,6 +75,7 @@ export interface FileRoutesByTo {
   '/terms': typeof TermsRoute
   '/$platform': typeof PlatformIndexRoute
   '/mastery': typeof MasteryIndexRoute
+  '/user': typeof UserIndexRoute
   '/$platform/s/$id': typeof PlatformSIdRoute
   '/$platform/s': typeof PlatformSIndexRoute
 }
@@ -78,6 +86,7 @@ export interface FileRoutesById {
   '/terms': typeof TermsRoute
   '/$platform/': typeof PlatformIndexRoute
   '/mastery/': typeof MasteryIndexRoute
+  '/user/': typeof UserIndexRoute
   '/$platform/s/$id': typeof PlatformSIdRoute
   '/$platform/s/': typeof PlatformSIndexRoute
 }
@@ -89,6 +98,7 @@ export interface FileRouteTypes {
     | '/terms'
     | '/$platform'
     | '/mastery'
+    | '/user'
     | '/$platform/s/$id'
     | '/$platform/s'
   fileRoutesByTo: FileRoutesByTo
@@ -98,6 +108,7 @@ export interface FileRouteTypes {
     | '/terms'
     | '/$platform'
     | '/mastery'
+    | '/user'
     | '/$platform/s/$id'
     | '/$platform/s'
   id:
@@ -107,6 +118,7 @@ export interface FileRouteTypes {
     | '/terms'
     | '/$platform/'
     | '/mastery/'
+    | '/user/'
     | '/$platform/s/$id'
     | '/$platform/s/'
   fileRoutesById: FileRoutesById
@@ -117,6 +129,7 @@ export interface RootRouteChildren {
   TermsRoute: typeof TermsRoute
   PlatformIndexRoute: typeof PlatformIndexRoute
   MasteryIndexRoute: typeof MasteryIndexRoute
+  UserIndexRoute: typeof UserIndexRoute
   PlatformSIdRoute: typeof PlatformSIdRoute
   PlatformSIndexRoute: typeof PlatformSIndexRoute
 }
@@ -142,6 +155,13 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/user/': {
+      id: '/user/'
+      path: '/user'
+      fullPath: '/user'
+      preLoaderRoute: typeof UserIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/mastery/': {
@@ -181,6 +201,7 @@ const rootRouteChildren: RootRouteChildren = {
   TermsRoute: TermsRoute,
   PlatformIndexRoute: PlatformIndexRoute,
   MasteryIndexRoute: MasteryIndexRoute,
+  UserIndexRoute: UserIndexRoute,
   PlatformSIdRoute: PlatformSIdRoute,
   PlatformSIndexRoute: PlatformSIndexRoute,
 }

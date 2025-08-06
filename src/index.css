@@ -1,18 +1,44 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap');
 @import "tailwindcss";
-@import "tw-animate-css";
 
 @theme {
-  --color-lose: #59343B;
-  --color-lose-300: #C9374C;
-  --color-lose-900: #703C47;
+  --font-sans: "Inter", sans-serif;
+}
 
-  --color-win: #27344E;
-  --color-win-300: #4A75CE;
-  --color-win-900: #2F436E;
+@import "tw-animate-css";
 
+@source inline("bg-match");
+@source inline("bg-match-300");
+@source inline("bg-match-900");
+
+@theme {
   --color-match: black;
   --color-match-300: black;
   --color-match-900: black;
+}
+
+@layer base {
+  :root {
+    --sidebar: oklch(0.985 0 0);
+    --sidebar-foreground: oklch(0.145 0 0);
+    --sidebar-primary: oklch(0.205 0 0);
+    --sidebar-primary-foreground: oklch(0.985 0 0);
+    --sidebar-accent: oklch(0.97 0 0);
+    --sidebar-accent-foreground: oklch(0.205 0 0);
+    --sidebar-border: oklch(0.922 0 0);
+    --sidebar-ring: oklch(0.708 0 0);
+  }
+
+  .dark {
+    --sidebar: oklch(0.205 0 0);
+    --sidebar-foreground: oklch(0.985 0 0);
+    --sidebar-primary: oklch(0.488 0.243 264.376);
+    --sidebar-primary-foreground: oklch(0.985 0 0);
+    --sidebar-accent: oklch(0.269 0 0);
+    --sidebar-accent-foreground: oklch(0.985 0 0);
+    --sidebar-border: oklch(1 0 0 / 10%);
+    --sidebar-ring: oklch(0.439 0 0);
+  }
 }
 
 @custom-variant dark (&:is(.dark *));

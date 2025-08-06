@@ -20,4 +20,11 @@ export default tseslint.config([
       globals: globals.browser,
     },
   },
+  {
+    rules: {
+      "@typescript-eslint/no-explicit-any": "off",
+      "@typescript-eslint/require-await": "error",
+      "@typescript-eslint/no-floating-promises": "error"
+    }
+  }
 ])

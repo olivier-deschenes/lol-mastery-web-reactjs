@@ -32,7 +32,7 @@ export function Mastery({ mastery }: Props) {
       <div className="flex rounded-md flex-col md:flex-row gap-3">
         <div className="flex">
           <img
-            src={urls.getChampionFullImage(mastery.champion.image.full)}
+            src={urls.getChampionIconUrl(mastery.champion.image.full)}
             className="rounded-md w-full md:h-[120px] aspect-square"
           />
         </div>

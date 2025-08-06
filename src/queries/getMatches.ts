@@ -1,7 +1,12 @@
-import { MatchesResponseSchema } from "@/api/match/types";
+import { CachedMatchSchema } from "@/api/match/types";
 import { apiClient } from "@/lib/utils";
 import { infiniteQueryOptions, useInfiniteQuery } from "@tanstack/react-query";
 import * as v from "valibot";
+
+const CachedMatchesResponseSchema = v.object({
+  data: v.array(CachedMatchSchema),
+  next_cursor: v.nullable(v.number()),
+});
 
 export const fetchMatches = async (
   platform: string,
@@ -16,7 +21,7 @@ export const fetchMatches = async (
     })
     .json();
 
-  return v.parse(MatchesResponseSchema, data);
+  return v.parse(CachedMatchesResponseSchema, data);
 };
 
 export const getMatchesOptions = (platform: string, riotID: string) =>
@@ -25,6 +30,8 @@ export const getMatchesOptions = (platform: string, riotID: string) =>
     queryFn: ({ pageParam }) => fetchMatches(platform, riotID, pageParam),
     initialPageParam: 0,
     getNextPageParam: (lastPage) => lastPage.next_cursor,
+    retry: false,
+    staleTime: 0,
   });
 
 export const useMatchList = (platform: string, riotID: string) =>
