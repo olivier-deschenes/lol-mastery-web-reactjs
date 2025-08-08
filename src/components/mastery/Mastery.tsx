@@ -22,12 +22,9 @@ export function Mastery({ mastery }: Props) {
 
   return (
     <div
-      className={cn(
-        "flex flex-col gap-1.5 cursor-pointer hover:bg-gray-100 rounded-md",
-        {
-          hidden: !isVisible,
-        }
-      )}
+      className={cn("flex flex-col gap-1.5 cursor-pointer rounded-md", {
+        hidden: !isVisible,
+      })}
     >
       <div className="flex rounded-md flex-col md:flex-row gap-3">
         <div className="flex">

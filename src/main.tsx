@@ -15,8 +15,7 @@ const router = createRouter({
     queryClient,
     auth: authClient,
   },
-  defaultPreload: "intent",
-  defaultPreloadStaleTime: 0,
+  defaultPreload: false,
 });
 
 // Register the router instance for type safety

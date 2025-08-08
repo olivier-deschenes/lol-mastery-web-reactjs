@@ -4,6 +4,7 @@ import { createFileRoute } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/$platform/s/$id")({
   component: RouteComponent,
+  beforeLoad: (ctx) => ({ platform: ctx.params.platform }),
   loader: (ctx) =>
     ctx.context.queryClient.ensureQueryData(
       getIDOptions(ctx.params.id, ctx.params.platform)

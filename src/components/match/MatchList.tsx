@@ -32,7 +32,7 @@ export const MatchList = () => {
         <ul
           key={i}
           className={
-            "flex flex-col mx-auto divide-gray-800 divide-y-1 border-1 border-gray-800"
+            "flex flex-col mx-auto divide-gray-800 divide-y-1 border-1 border-sidebar-border w-full rounded-md"
           }
         >
           {group.data.map((match) => {

@@ -108,7 +108,7 @@ export function Summoner({ summoner }: Props) {
   return (
     <div
       className={cn(
-        "flex bg-gray-100 border-r-[1rem] rounded-r-md justify-center items-center w-auto transition-all duration-200 ease-in-out",
+        "group flex bg-sidebar border-r-[1rem] rounded-r-md justify-center items-center w-auto transition-all duration-200 ease-in-out",
         {
           "opacity-50": !fs.includes(getSummonerIndexFromPuuid(summoner.puuid)),
         }
@@ -127,7 +127,7 @@ export function Summoner({ summoner }: Props) {
         </div>
         <button
           className={
-            "bg-slate-300 px-1 flex justify-center items-center rounded hover:bg-slate-200 transition-all"
+            "bg-neutral-950 px-1 flex justify-center items-center rounded hover:scale-105 hover:cursor-pointer transition-all"
           }
           onClick={handleRefresh}
         >
@@ -136,7 +136,10 @@ export function Summoner({ summoner }: Props) {
           </span>
           <RefreshCcwIcon
             size={10}
-            className={cn(m_mastery.isPending && "animate-spin")}
+            className={cn(
+              m_mastery.isPending && "animate-spin",
+              "group-hover:rotate-180 transition-transform"
+            )}
           />
         </button>
       </div>

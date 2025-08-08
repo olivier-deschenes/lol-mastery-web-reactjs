@@ -10,6 +10,7 @@ export const apiClient = ky.create({
   prefixUrl: import.meta.env.VITE_API_URL,
   timeout: false,
   retry: 0,
+  credentials: "include",
 });
 
 export const formatter = Intl.NumberFormat("en", { notation: "compact" });
@@ -70,4 +71,11 @@ export const toTitleCase = (s: string) => {
     .split(" ")
     .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
     .join(" ");
+};
+
+export const getInitials = (user: string) => {
+  return user
+    .split(" ")
+    .map((p) => p.at(0)?.toUpperCase())
+    .join();
 };

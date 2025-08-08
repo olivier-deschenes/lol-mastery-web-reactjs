@@ -19,7 +19,7 @@ export const MatchItemContent = () => {
   return (
     <div
       className={cn(
-        "flex gap-2.5 w-full rounded-md bg-linear-to-r to-black p-5 m-2.5 mt-0 h-34",
+        "flex gap-2.5 w-full rounded-md bg-linear-to-r to-neutral-950 p-5 m-2.5 mt-0 h-34",
         win ? "from-emerald-300/20" : "from-red-300/20"
       )}
     >

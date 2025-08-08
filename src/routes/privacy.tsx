@@ -1,3 +1,12 @@
+import { Badge } from "@/components/ui/badge";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Separator } from "@/components/ui/separator";
 import { createFileRoute } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/privacy")({
@@ -6,77 +15,105 @@ export const Route = createFileRoute("/privacy")({
 
 function PrivacyPage() {
   return (
-    <div className="w-screen min-h-screen flex flex-col text-gray-800">
-      {/* Main content */}
-      <main className="flex-grow max-w-4xl mx-auto px-4 py-8 prose prose-slate">
-        <h2>Privacy Policy</h2>
-        <p>
-          <strong>Effective date:</strong> 24 July 2025
-        </p>
+    <section className="mx-auto w-full max-w-3xl px-4 py-6 md:py-10">
+      <Card className="border-neutral-700 bg-neutral-900 text-neutral-100 shadow-lg">
+        <CardHeader className="space-y-2">
+          <div className="flex items-center gap-2">
+            <CardTitle className="text-2xl font-semibold text-white">
+              Privacy Policy
+            </CardTitle>
+            <Badge className="bg-emerald-600/20 text-emerald-300 border-emerald-600/40">
+              Updated
+            </Badge>
+          </div>
+          <CardDescription className="text-neutral-300">
+            Effective date: 24 July 2025
+          </CardDescription>
+        </CardHeader>
 
-        <h3>1 . Who we are</h3>
-        <p>
-          championmastery.lol is an independent web application that aggregates
-          mastery data from the Riot Games API for League of Legends players.
-          Contact:{" "}
-          <a href="mailto:olivierdeschenes9@gmail.com">
-            olivierdeschenes9@gmail.com
-          </a>
-        </p>
+        <Separator className="bg-neutral-800" />
 
-        <h3>2 . What we collect</h3>
-        <ul>
-          <li>
-            <strong>Riot API responses</strong> — raw data fetched when you
-            request information for specific summoners.
-          </li>
-          <li>No personal user data, cookies, or analytics are stored.</li>
-        </ul>
+        {/* Larger font size and generous line-height */}
+        <CardContent className="text-[16px] leading-7 space-y-6">
+          <p className="text-neutral-200">
+            championsmastery.lol is an independent web application that
+            aggregates mastery data from the Riot Games API for League of
+            Legends players. Contact:{" "}
+            <span className="text-neutral-100">
+              olivierdeschenes9@gmail.com
+            </span>
+          </p>
 
-        <h3>3 . How we use the data</h3>
-        <ul>
-          <li>
-            To generate cumulative champion-mastery views for the accounts you
-            supply.
-          </li>
-          <li>To diagnose and correct service errors.</li>
-        </ul>
-
-        <h3>4 . Public display</h3>
-        <p>
-          Mastery statistics are publicly visible to anyone who knows the
-          relevant account identifiers. Submit only accounts you are comfortable
-          sharing.
-        </p>
-
-        <h3>5 . Data retention</h3>
-        <p>
-          Stored Riot API responses are kept until newer data replaces them or
-          we remove them during routine maintenance.
-        </p>
-
-        <h3>6 . Security</h3>
-        <p>
-          We use industry-standard measures to protect stored data, but no
-          online service can guarantee absolute security.
-        </p>
-
-        <h3>7 . Your rights</h3>
-        <p>
-          Because we do not hold personal data about you, typical
-          access-or-deletion requests do not apply. For concerns, email us at
-          the address above.
-        </p>
-
-        <h3>8 . Changes to this policy</h3>
-        <p>
-          We may update this Privacy Policy. Continued use of the site after an
-          update signifies acceptance of the new policy.
-        </p>
-
-        <h3>9 . Governing law</h3>
-        <p>This policy is governed by the laws of Quebec, Canada.</p>
-      </main>
-    </div>
+          <ol className="list-decimal pl-6 space-y-4">
+            <li>
+              <h3 className="font-semibold text-white">Who we are</h3>
+              <p className="text-neutral-200">
+                An independent site for viewing champion mastery statistics.
+              </p>
+            </li>
+            <li>
+              <h3 className="font-semibold text-white">What we collect</h3>
+              <p className="text-neutral-200">
+                Riot API responses (raw match and profile data) when you request
+                information for specific summoners. We do not store personal
+                user data, cookies, or analytics.
+              </p>
+            </li>
+            <li>
+              <h3 className="font-semibold text-white">How we use the data</h3>
+              <p className="text-neutral-200">
+                To generate cumulative champion&#8209;mastery views and to
+                diagnose/correct service issues.
+              </p>
+            </li>
+            <li>
+              <h3 className="font-semibold text-white">Public display</h3>
+              <p className="text-neutral-200">
+                Mastery statistics are visible to anyone with the relevant
+                account identifiers. Submit only accounts you are comfortable
+                sharing.
+              </p>
+            </li>
+            <li>
+              <h3 className="font-semibold text-white">Data retention</h3>
+              <p className="text-neutral-200">
+                Stored Riot API responses are kept until replaced by newer data
+                or removed during routine maintenance.
+              </p>
+            </li>
+            <li>
+              <h3 className="font-semibold text-white">Security</h3>
+              <p className="text-neutral-200">
+                Industry‑standard measures are used to protect stored data, but
+                no online service can guarantee absolute security.
+              </p>
+            </li>
+            <li>
+              <h3 className="font-semibold text-white">Your rights</h3>
+              <p className="text-neutral-200">
+                We do not hold personal data about you, so typical access or
+                deletion requests generally do not apply. For concerns, email
+                the address above.
+              </p>
+            </li>
+            <li>
+              <h3 className="font-semibold text-white">
+                Changes to this policy
+              </h3>
+              <p className="text-neutral-200">
+                We may update this Privacy Policy. Continued use of the site
+                after an update signifies acceptance.
+              </p>
+            </li>
+            <li>
+              <h3 className="font-semibold text-white">Governing law</h3>
+              <p className="text-neutral-200">
+                This policy is governed by the laws of Quebec, Canada.
+              </p>
+            </li>
+          </ol>
+        </CardContent>
+      </Card>
+    </section>
   );
 }

@@ -11,12 +11,12 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as TermsRouteImport } from './routes/terms'
 import { Route as PrivacyRouteImport } from './routes/privacy'
+import { Route as PlatformRouteRouteImport } from './routes/$platform/route'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as UserIndexRouteImport } from './routes/user/index'
 import { Route as MasteryIndexRouteImport } from './routes/mastery/index'
-import { Route as PlatformIndexRouteImport } from './routes/$platform/index'
-import { Route as PlatformSIndexRouteImport } from './routes/$platform/s/index'
-import { Route as PlatformSIdRouteImport } from './routes/$platform/s/$id'
+import { Route as UserRiotIdsRouteImport } from './routes/user/riot-ids'
+import { Route as PlatformSIdRouteImport } from './routes/$platform/s.$id'
 
 const TermsRoute = TermsRouteImport.update({
   id: '/terms',
@@ -26,6 +26,11 @@ const TermsRoute = TermsRouteImport.update({
 const PrivacyRoute = PrivacyRouteImport.update({
   id: '/privacy',
   path: '/privacy',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PlatformRouteRoute = PlatformRouteRouteImport.update({
+  id: '/$platform',
+  path: '/$platform',
   getParentRoute: () => rootRouteImport,
 } as any)
 const IndexRoute = IndexRouteImport.update({
@@ -43,95 +48,89 @@ const MasteryIndexRoute = MasteryIndexRouteImport.update({
   path: '/mastery/',
   getParentRoute: () => rootRouteImport,
 } as any)
-const PlatformIndexRoute = PlatformIndexRouteImport.update({
-  id: '/$platform/',
-  path: '/$platform/',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const PlatformSIndexRoute = PlatformSIndexRouteImport.update({
-  id: '/$platform/s/',
-  path: '/$platform/s/',
+const UserRiotIdsRoute = UserRiotIdsRouteImport.update({
+  id: '/user/riot-ids',
+  path: '/user/riot-ids',
   getParentRoute: () => rootRouteImport,
 } as any)
 const PlatformSIdRoute = PlatformSIdRouteImport.update({
-  id: '/$platform/s/$id',
-  path: '/$platform/s/$id',
-  getParentRoute: () => rootRouteImport,
+  id: '/s/$id',
+  path: '/s/$id',
+  getParentRoute: () => PlatformRouteRoute,
 } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/$platform': typeof PlatformRouteRouteWithChildren
   '/privacy': typeof PrivacyRoute
   '/terms': typeof TermsRoute
-  '/$platform': typeof PlatformIndexRoute
+  '/user/riot-ids': typeof UserRiotIdsRoute
   '/mastery': typeof MasteryIndexRoute
   '/user': typeof UserIndexRoute
   '/$platform/s/$id': typeof PlatformSIdRoute
-  '/$platform/s': typeof PlatformSIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/$platform': typeof PlatformRouteRouteWithChildren
   '/privacy': typeof PrivacyRoute
   '/terms': typeof TermsRoute
-  '/$platform': typeof PlatformIndexRoute
+  '/user/riot-ids': typeof UserRiotIdsRoute
   '/mastery': typeof MasteryIndexRoute
   '/user': typeof UserIndexRoute
   '/$platform/s/$id': typeof PlatformSIdRoute
-  '/$platform/s': typeof PlatformSIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/$platform': typeof PlatformRouteRouteWithChildren
   '/privacy': typeof PrivacyRoute
   '/terms': typeof TermsRoute
-  '/$platform/': typeof PlatformIndexRoute
+  '/user/riot-ids': typeof UserRiotIdsRoute
   '/mastery/': typeof MasteryIndexRoute
   '/user/': typeof UserIndexRoute
   '/$platform/s/$id': typeof PlatformSIdRoute
-  '/$platform/s/': typeof PlatformSIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/$platform'
     | '/privacy'
     | '/terms'
-    | '/$platform'
+    | '/user/riot-ids'
     | '/mastery'
     | '/user'
     | '/$platform/s/$id'
-    | '/$platform/s'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/$platform'
     | '/privacy'
     | '/terms'
-    | '/$platform'
+    | '/user/riot-ids'
     | '/mastery'
     | '/user'
     | '/$platform/s/$id'
-    | '/$platform/s'
   id:
     | '__root__'
     | '/'
+    | '/$platform'
     | '/privacy'
     | '/terms'
-    | '/$platform/'
+    | '/user/riot-ids'
     | '/mastery/'
     | '/user/'
     | '/$platform/s/$id'
-    | '/$platform/s/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  PlatformRouteRoute: typeof PlatformRouteRouteWithChildren
   PrivacyRoute: typeof PrivacyRoute
   TermsRoute: typeof TermsRoute
-  PlatformIndexRoute: typeof PlatformIndexRoute
+  UserRiotIdsRoute: typeof UserRiotIdsRoute
   MasteryIndexRoute: typeof MasteryIndexRoute
   UserIndexRoute: typeof UserIndexRoute
-  PlatformSIdRoute: typeof PlatformSIdRoute
-  PlatformSIndexRoute: typeof PlatformSIndexRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -148,6 +147,13 @@ declare module '@tanstack/react-router' {
       path: '/privacy'
       fullPath: '/privacy'
       preLoaderRoute: typeof PrivacyRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/$platform': {
+      id: '/$platform'
+      path: '/$platform'
+      fullPath: '/$platform'
+      preLoaderRoute: typeof PlatformRouteRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/': {
@@ -171,39 +177,43 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof MasteryIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/$platform/': {
-      id: '/$platform/'
-      path: '/$platform'
-      fullPath: '/$platform'
-      preLoaderRoute: typeof PlatformIndexRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/$platform/s/': {
-      id: '/$platform/s/'
-      path: '/$platform/s'
-      fullPath: '/$platform/s'
-      preLoaderRoute: typeof PlatformSIndexRouteImport
+    '/user/riot-ids': {
+      id: '/user/riot-ids'
+      path: '/user/riot-ids'
+      fullPath: '/user/riot-ids'
+      preLoaderRoute: typeof UserRiotIdsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/$platform/s/$id': {
       id: '/$platform/s/$id'
-      path: '/$platform/s/$id'
+      path: '/s/$id'
       fullPath: '/$platform/s/$id'
       preLoaderRoute: typeof PlatformSIdRouteImport
-      parentRoute: typeof rootRouteImport
+      parentRoute: typeof PlatformRouteRoute
     }
   }
 }
 
+interface PlatformRouteRouteChildren {
+  PlatformSIdRoute: typeof PlatformSIdRoute
+}
+
+const PlatformRouteRouteChildren: PlatformRouteRouteChildren = {
+  PlatformSIdRoute: PlatformSIdRoute,
+}
+
+const PlatformRouteRouteWithChildren = PlatformRouteRoute._addFileChildren(
+  PlatformRouteRouteChildren,
+)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  PlatformRouteRoute: PlatformRouteRouteWithChildren,
   PrivacyRoute: PrivacyRoute,
   TermsRoute: TermsRoute,
-  PlatformIndexRoute: PlatformIndexRoute,
+  UserRiotIdsRoute: UserRiotIdsRoute,
   MasteryIndexRoute: MasteryIndexRoute,
   UserIndexRoute: UserIndexRoute,
-  PlatformSIdRoute: PlatformSIdRoute,
-  PlatformSIndexRoute: PlatformSIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

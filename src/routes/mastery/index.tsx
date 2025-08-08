@@ -171,7 +171,7 @@ function Index() {
 
   return (
     <MasteryProvider mastery={mergedData}>
-      <div className="container flex flex-col mx-auto">
+      <div className="container flex flex-col mx-auto p-10">
         <div className="flex flex-col w-full lg:w-1/2 justify-center items-center mx-auto gap-3">
           <div className="w-full">
             <Textarea
